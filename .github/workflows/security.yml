@@ -3,21 +3,36 @@ on: [push, pull_request]
 
 jobs:
   gitleaks:
+    name: Gitleaks (segredos)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
+      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   semgrep:
+    name: Semgrep (SAST)
     runs-on: ubuntu-latest
     container:
       image: semgrep/semgrep
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: semgrep ci --config auto
         env:
           SEMGREP_RULES: p/default
+
+  imagem:
+    name: Trivy (imagem Docker)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Build da imagem
+        run: docker build -t devsecops-fiap:ci .
+      - name: Varredura Trivy
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.76.1 image --exit-code 1 --severity HIGH,CRITICAL \
+            --ignore-unfixed --no-progress devsecops-fiap:ci

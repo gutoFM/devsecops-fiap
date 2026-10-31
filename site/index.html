@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Esteira DevSecOps | FIAP</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <p class="selo">FIAP · Engenharia de Software · CP5</p>
+    <h1>Esteira DevSecOps</h1>
+    <p class="sub">Todo push passa por três barreiras antes de virar entrega. Se uma delas acusar, o commit fica vermelho.</p>
+  </header>
+
+  <main>
+    <section class="barreiras">
+      <article class="card">
+        <span class="num">01</span>
+        <h2>Gitleaks</h2>
+        <p>Varre o histórico de commits atrás de senhas, tokens e chaves. Segredo commitado não some apagando o arquivo, então a barreira precisa estar antes do merge.</p>
+      </article>
+      <article class="card">
+        <span class="num">02</span>
+        <h2>Semgrep</h2>
+        <p>Lê o código como estrutura e aponta padrões perigosos, como <code>eval</code> com entrada do usuário, SQL concatenado e <code>shell=True</code>.</p>
+      </article>
+      <article class="card">
+        <span class="num">03</span>
+        <h2>Trivy</h2>
+        <p>Constrói a imagem Docker deste site e procura vulnerabilidades conhecidas nos pacotes do sistema e nas dependências antes de a imagem virar artefato.</p>
+      </article>
+    </section>
+
+    <section class="como">
+      <h2>Como rodar</h2>
+      <pre><code>docker build -t devsecops-fiap .
+docker run --rm -p 8080:8080 devsecops-fiap</code></pre>
+      <p>O container usa nginx sem root e responde em <code>http://localhost:8080</code>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Augusto Milreu · David Denunci · Fernando Popolili · Lucas de Toledo · Matheus Zanardi</p>
+  </footer>
+</body>
+</html>
